@@ -198,6 +198,33 @@ public class PhotoEditor implements BrushViewChangeListener {
     }
 
     /**
+     * This will update the text and color on provided view
+     *
+     * @param view         root view where text view is a child
+     * @param textTypeface update typeface for custom font in the text
+     * @param inputText    text to update {@link TextView}
+     * @param colorCode    color to update on {@link TextView}
+     */
+    public void editText(View view, Typeface textTypeface, String inputText, int colorCode, float textSize) {
+        TextView inputTextView = view.findViewById(R.id.tvPhotoEditorText);
+        if (inputTextView != null && addedViews.contains(view) && !TextUtils.isEmpty(inputText)) {
+            inputTextView.setText(inputText);
+            if (textTypeface != null) {
+                inputTextView.setTypeface(textTypeface);
+            }
+
+            if (textSize != 0) {
+                inputTextView.setTextSize(textSize);
+            }
+
+            inputTextView.setTextColor(colorCode);
+            parentView.updateViewLayout(view, view.getLayoutParams());
+            int i = addedViews.indexOf(view);
+            if (i > -1) addedViews.set(i, view);
+        }
+    }
+
+    /**
      * Adds emoji to the {@link PhotoEditorView} which you drag,rotate and scale using pinch
      * if {@link PhotoEditor.Builder#setPinchTextScalable(boolean)} enabled
      *
