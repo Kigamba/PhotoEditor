@@ -8,7 +8,7 @@
 
 def libraryGroupId = 'ja.burhanrashid52'
 def libraryArtifactId = 'photoeditor'
-def libraryVersion = '0.3.4'
+def libraryVersion = '0.3.5'
 
 
 task sourceJar(type: Jar) {
