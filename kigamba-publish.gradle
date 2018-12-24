@@ -1,0 +1,78 @@
+/**
+ * ------------------------------------------------------
+ *
+ * ARTIFACT PUBLISHING CODE AND CONFIGURATIONS
+ *
+ * ------------------------------------------------------
+ */
+
+def libraryGroupId = 'ja.burhanrashid52'
+def libraryArtifactId = 'photoeditor'
+def libraryVersion = '0.3.4'
+
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+artifacts {
+    archives sourceJar
+}
+
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId libraryGroupId
+            artifactId libraryArtifactId
+            version libraryVersion
+
+            artifact("$buildDir/outputs/aar/photoeditor-release.aar")
+            artifact(sourceJar)
+
+            //The publication doesn't know about our dependencies, so we have to manually add them to the pom
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.implementation.allDependencies.each {
+                    if (it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+}
+
+artifactory {
+    contextUrl = 'https://maven.totalodds.tk/artifactory'
+    publish {
+        repository {
+            repoKey = 'libs-release-local'
+
+            username = artifactory_username
+            password = artifactory_password
+        }
+
+        defaults {
+            publications('aar')
+            publishArtifacts = true
+
+            properties = ['qa.level': 'basic', 'q.os': 'android', 'dev.team': 'core']
+            publishPom = true
+        }
+    }
+}
+
+
+task cleanArtifactsPublish(type: GradleBuild) {
+    tasks = ['clean', 'build', 'artifactoryPublish']
+
+    build.mustRunAfter 'clean'
+    artifactoryPublish.mustRunAfter 'build'
+}

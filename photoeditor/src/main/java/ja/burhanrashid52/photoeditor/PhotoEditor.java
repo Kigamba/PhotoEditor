@@ -163,6 +163,54 @@ public class PhotoEditor implements BrushViewChangeListener {
         addViewToParent(textRootView, ViewType.TEXT);
     }
 
+    /**
+     * This add the text on the {@link PhotoEditorView} with provided parameters
+     * by default {@link TextView#setText(int)} will be 18sp
+     *
+     * @param textTypeface      typeface for custom font in the text
+     * @param text              text to display
+     * @param colorCodeTextView text color to be displayed
+     * @param textSize          text size
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    public void addText(@Nullable Typeface textTypeface, String text, final int colorCodeTextView, float textSize) {
+        brushDrawingView.setBrushDrawingMode(false);
+        final View textRootView = getLayout(ViewType.TEXT);
+        final TextView textInputTv = textRootView.findViewById(R.id.tvPhotoEditorText);
+        final ImageView imgClose = textRootView.findViewById(R.id.imgPhotoEditorClose);
+        final FrameLayout frmBorder = textRootView.findViewById(R.id.frmBorder);
+
+        textInputTv.setText(text);
+        textInputTv.setTextColor(colorCodeTextView);
+        textInputTv.setTextSize(textSize);
+
+        if (textTypeface != null) {
+            textInputTv.setTypeface(textTypeface);
+        }
+        MultiTouchListener multiTouchListener = getMultiTouchListener();
+        multiTouchListener.setOnGestureControl(new MultiTouchListener.OnGestureControl() {
+            @Override
+            public void onClick() {
+                boolean isBackgroundVisible = frmBorder.getTag() != null && (boolean) frmBorder.getTag();
+                frmBorder.setBackgroundResource(isBackgroundVisible ? 0 : R.drawable.rounded_border_tv);
+                imgClose.setVisibility(isBackgroundVisible ? View.GONE : View.VISIBLE);
+                frmBorder.setTag(!isBackgroundVisible);
+            }
+
+            @Override
+            public void onLongClick() {
+                String textInput = textInputTv.getText().toString();
+                int currentTextColor = textInputTv.getCurrentTextColor();
+                if (mOnPhotoEditorListener != null) {
+                    mOnPhotoEditorListener.onEditTextChangeListener(textRootView, textInput, currentTextColor);
+                }
+            }
+        });
+
+        textRootView.setOnTouchListener(multiTouchListener);
+        addViewToParent(textRootView, ViewType.TEXT);
+    }
+
 
     /**
      * This will update text and color on provided view
