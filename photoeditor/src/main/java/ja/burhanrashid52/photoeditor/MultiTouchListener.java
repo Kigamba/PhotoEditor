@@ -270,5 +270,10 @@ class MultiTouchListener implements OnTouchListener {
                 mOnGestureControl.onLongClick();
             }
         }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
     }
 }
