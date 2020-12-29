@@ -34,40 +34,41 @@ A Photo Editor library with simple, easy support for image editing using paints,
 
 1. Add the following repository to your `allprojects { ... repositories { ...` block inside your project root level `build.gradle`:
 
-        ```
-        maven {
-            url "https://maven.pkg.github.com/Kigamba/PhotoEditor"
-
-            credentials {
-                username = "Kigamba"
-                password = "34c7ebe0cf00321084e5c30e9f088c1f4c36007d"
-            }
+    ```
+    maven {
+        url "https://maven.pkg.github.com/Kigamba/PhotoEditor"
+    
+        credentials {
+            username = "Kigamba"
+            password = "34c7ebe0cf00321084e5c30e9f088c1f4c36007d"
         }
-        ```
+    }
+    ```
+   
+   eg.
+   
+    ```
+    allprojects {
 
-        eg.
-        ```
-        allprojects {
+        ...
 
-            ...
+        repositories {
+            maven {
+                url "https://maven.pkg.github.com/Kigamba/PhotoEditor"
 
-            repositories {
-                maven {
-                    url "https://maven.pkg.github.com/Kigamba/PhotoEditor"
-
-                    credentials {
-                        username = "Kigamba"
-                        password = "34c7ebe0cf00321084e5c30e9f088c1f4c36007d"
-                    }
+                credentials {
+                    username = "Kigamba"
+                    password = "34c7ebe0cf00321084e5c30e9f088c1f4c36007d"
                 }
             }
         }
-        ```
+    }
+    ```
 
 2. Add the dependencies in gradle file of app module like this
-```java
-implementation 'ja.burhanrashid52:photoeditor:0.3.3'
-```
+    ```java
+    implementation 'ja.burhanrashid52:photoeditor:0.3.3'
+    ```
 or your can also import the :photoeditor module from sample for customization
 
 
@@ -166,12 +167,13 @@ In order to edit the text you need the view which you will receive in you PhotoE
 
  ```java
  mPhotoEditor.setOnPhotoEditorListener(new OnPhotoEditorListener() {
-            @Override
-            public void onEditTextChangeListener(View rootView, String text, int colorCode) {
-                
-            }
-        });
-  ```
+    @Override
+    public void onEditTextChangeListener(View rootView, String text, int colorCode) {
+        
+    }
+});
+```
+
 Now you can edit the text with a view like this
 
 `mPhotoEditor.editText(rootView, inputText, colorCode);`
@@ -218,22 +220,35 @@ It will take default fonts provided in the builder,If you want different Emoji f
   
 
 ## Saving
-   
+
    You need provide a file with callback method when edited image is saved
    
-   ```java
-    mPhotoEditor.saveAsFile(filePath, new PhotoEditor.OnSaveListener() {
-                    @Override
-                    public void onSuccess(@NonNull String imagePath) {
-                       Log.e("PhotoEditor","Image Saved Successfully");
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.e("PhotoEditor","Failed to save Image");
-                    }
-                });
     ```
+    mPhotoEditor.saveAsFile(filePath, new PhotoEditor.OnSaveListener() {
+        @Override
+        public void onSuccess(@NonNull String imagePath) {
+           Log.e("PhotoEditor","Image Saved Successfully");
+        }
+    
+        @Override
+        public void onFailure(@NonNull Exception exception) {
+            Log.e("PhotoEditor","Failed to save Image");
+        }
+    });
+    ```
+
+
+## Publishing the release
+
+1. Publishing to Github packages
+
+Make sure that the `kigamba-publish.gradle` file has the correct `url`, `username` and `password`.  
+Call `./gradlew photoeditor:assemble` to generate the aar and then call 
+`./gradlew photoeditor:publish` to publish to the Github packages repository.
+
+2. Publishing to local maven repository
+Call `./gradlew photoeditor:publishAarPublicationToMavenLocal` and add `mavenLocal()` on your target project
+
 For more detail check [Saving](https://github.com/burhanrashid52/PhotoEditor/wiki/Saving)
     
 ## How to contribute?
