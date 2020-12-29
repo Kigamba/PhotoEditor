@@ -55,8 +55,8 @@ artifactory {
         repository {
             repoKey = 'libs-release-local'
 
-            username = artifactory_username
-            password = artifactory_password
+            username = "username" //artifactory_username
+            password = "password" //artifactory_password
         }
 
         defaults {
