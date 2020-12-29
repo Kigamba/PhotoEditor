@@ -31,7 +31,40 @@ A Photo Editor library with simple, easy support for image editing using paints,
 
 
 ## Getting Started
-To start with this , you need to just simply add the dependencies in gradle file of app module like this
+
+1. Add the following repository to your `allprojects { ... repositories { ...` block inside your project root level `build.gradle`:
+
+        ```
+        maven {
+            url "https://maven.pkg.github.com/Kigamba/PhotoEditor"
+
+            credentials {
+                username = "Kigamba"
+                password = "34c7ebe0cf00321084e5c30e9f088c1f4c36007d"
+            }
+        }
+        ```
+
+        eg.
+        ```
+        allprojects {
+
+            ...
+
+            repositories {
+                maven {
+                    url "https://maven.pkg.github.com/Kigamba/PhotoEditor"
+
+                    credentials {
+                        username = "Kigamba"
+                        password = "34c7ebe0cf00321084e5c30e9f088c1f4c36007d"
+                    }
+                }
+            }
+        }
+        ```
+
+2. Add the dependencies in gradle file of app module like this
 ```java
 implementation 'ja.burhanrashid52:photoeditor:0.3.3'
 ```
@@ -200,7 +233,7 @@ It will take default fonts provided in the builder,If you want different Emoji f
                         Log.e("PhotoEditor","Failed to save Image");
                     }
                 });
-```
+    ```
 For more detail check [Saving](https://github.com/burhanrashid52/PhotoEditor/wiki/Saving)
     
 ## How to contribute?
